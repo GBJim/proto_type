@@ -55,3 +55,8 @@ gem 'tzinfo-data'
 gem 'validates_formatting_of'
 # my own gems
 gem 'roo'
+gem 'activerecord-import'
+gem 'dcjs-rails'
+gem 'd3-rails'
+gem 'crossfilter-rails'
+gem 'c3-rails'

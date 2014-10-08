@@ -9,6 +9,13 @@ class TweetsController < ApplicationController
 
   # GET /tweets/1
   # GET /tweets/1.json
+  def chart
+    #emotions_count = get_emotion
+    @daily_emotion = get_daily_emotion
+    render js: "alert(@daily_emotion)"
+  end
+
+
   def show
   end
 
@@ -71,4 +78,30 @@ class TweetsController < ApplicationController
     def tweet_params
       params.require(:tweet).permit(:body, :lon, :lat, :date, :emotion)
     end
+
+    def get_daily_emotion
+      start_date = Tweet.minimum(:date)
+      end_date = Tweet.maximum(:date)
+      date_range = (start_date..end_date).map {|day| day }
+      daily_emotion = []
+      date_range.each do |day|
+        daily_emotion.push(get_emotion(day))
+      end
+      daily_emotion
+    end
+
+
+    def get_emotion(date)
+      category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
+      emotions_count = {}
+      tweets = Tweet.where(date:date)
+      category.each do |emotion|
+      
+        emotions_count[emotion] = tweets.where(emotion: emotion,).count
+      end
+
+      emotions_count['date'] = date
+      emotions_count
+    end
+
 end
