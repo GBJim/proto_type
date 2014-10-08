@@ -79,6 +79,11 @@ GEM
     execjs (2.2.1)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    gon (5.2.0)
+      actionpack (>= 2.3.0)
+      json
+      multi_json
+      request_store (>= 1.0.5)
     hashie (3.3.1)
     hike (1.2.3)
     i18n (0.6.11)
@@ -148,6 +153,7 @@ GEM
     rake (10.3.2)
     rdoc (4.1.2)
       json (~> 1.4)
+    request_store (1.1.0)
     responders (1.1.1)
       railties (>= 3.2, < 4.2)
     roo (1.13.2)
@@ -310,6 +316,7 @@ DEPENDENCIES
   d3-rails
   dcjs-rails
   devise!
+  gon
   jbuilder (~> 2.0)
   jquery-rails
   omniauth
