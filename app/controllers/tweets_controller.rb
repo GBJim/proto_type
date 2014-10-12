@@ -16,7 +16,12 @@ class TweetsController < ApplicationController
   end
 
   def visualization
-    gon.data = get_every_emotion
+    @q = Tweet.search(params[:q])
+    tweets = @q.result
+    @show_tweets = tweets.take(5)
+    gon.daily_emotion = get_every_emotion(tweets)
+    gon.total_emotion = get_emotion(tweets)
+    gon.locations = get_locations(tweets)
   end
 
   def show
@@ -93,40 +98,44 @@ class TweetsController < ApplicationController
       daily_emotion
     end
 
-    def get_every_emotion
+    def get_every_emotion(tweets)
       emotion_category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
-      start_date = Tweet.minimum(:date)
-      end_date = Tweet.maximum(:date)
+      start_date = tweets.minimum(:date)
+      end_date = tweets.maximum(:date)
       date_range = (start_date..end_date).map {|day| day }
       every_emotion = []
       emotion_category.each do |emotion|
-        every_emotion.push get_total_emotion(date_range,emotion)
+        every_emotion.push get_total_emotion(tweets,date_range,emotion)
       end
       date_range.insert 0,'x'
       every_emotion.insert 0, date_range
     end
 
 
-    def get_total_emotion(date_range,emotion)
+    def get_total_emotion(tweets,date_range,emotion)
       emotion_count = [emotion]
       date_range.each do |date|
-        emotion_count.push(Tweet.where(date:date,emotion:emotion).count)
+        emotion_count.push(tweets.where(date:date,emotion:emotion).count)
       end
       emotion_count
 
     end
 
-    def get_emotion(date)
+    def get_emotion(tweets)
       category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
-      emotions_count = {}
-      tweets = Tweet.where(date:date)
+      emotions_count = []
       category.each do |emotion|
-      
-        emotions_count[emotion] = tweets.where(emotion: emotion,).count
+        emotions_count.push [emotion, tweets.where(emotion: emotion,).count ]
       end
-
-      emotions_count['date'] = date
       emotions_count
+    end
+
+    def get_locations(tweets)
+      tweets_locations = []
+      tweets.each do |tweet|
+        tweets_locations.push [tweet.emotion,tweet.lon,tweet.lat]
+      end
+      tweets_locations
     end
 
 end

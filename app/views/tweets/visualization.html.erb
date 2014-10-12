@@ -1,2 +1,16 @@
-hello
-<div id ="chart"></div>
+
+<%=search_form_for @q, url: visualization_tweets_path, html:{method: :get} do |f|%>
+<%=f.label :body_cont%>
+<%=f.search_field :body_cont%>
+<%=f.submit%>
+<%end%>
+
+
+
+<div id = "pie-chart"></div>
+<div id = "line-chart"></div>
+<div id="map"></div>
+
+<table class = "table table-hover">
+<%=render @show_tweets%>
+</table>

@@ -36,3 +36,54 @@
 .form-user {
   max-width: 450px;
 }
+
+.stations, .stations svg {
+  position: absolute;
+}
+
+.stations svg {
+  width: 60px;
+  height: 20px;
+  padding-right: 100px;
+  font: 10px sans-serif;
+}
+
+.stations circle {
+
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
+.fear{
+	fill:green;
+
+}
+
+.sadness{
+	fill: #5151FF;
+
+}
+.trust{
+	fill:#54FF54;
+}
+.anger{
+	fill:#D40000
+}
+.joy{
+	fill:#FFFF54
+}
+.disgust{
+	fill:#FF54FF
+}
+.anticipation{
+	fill:#FFA854
+}
+
+.surprise{
+	fill:#59BDFF
+}
+
+#map{
+	width:100%;
+	height: 600px;
+}
