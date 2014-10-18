@@ -18,8 +18,8 @@ class TweetsController < ApplicationController
   def visualization
     @q = Tweet.search(params[:q])
     tweets = @q.result
-    @show_tweets = tweets.take(5)
-    gon.daily_emotion = get_every_emotion(tweets)
+    @show_tweets = tweets.select("emotion","body").take(5)
+    gon.daily_emotion = get_daily_emotion_ratio(tweets)
     gon.total_emotion = get_emotion(tweets)
     gon.locations = get_locations(tweets)
   end
@@ -87,15 +87,31 @@ class TweetsController < ApplicationController
       params.require(:tweet).permit(:body, :lon, :lat, :date, :emotion)
     end
 
-    def get_daily_emotion
-      start_date = Tweet.minimum(:date)
-      end_date = Tweet.maximum(:date)
+
+
+    def get_daily_emotion_ratio(tweets)
+      start_date = tweets.start_date
+      end_date = tweets.end_date
       date_range = (start_date..end_date).map {|day| day }
+      total_daily_count = tweets.group("date").count
+      total_daily_count.default = 0
+      emotion_hash = tweets.daily_emotion_count
+      emotion_hash.default = 0
       daily_emotion = []
-      date_range.each do |day|
-        daily_emotion.push(get_emotion(day))
+      emotion_category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
+      
+      emotion_category.each do |emotion|
+        count_result = [emotion]
+        date_range.each do |day|
+          divider = total_daily_count[day]
+          ratio = divider>0 ? emotion_hash[[emotion,day]]*100/divider : 0
+
+          count_result.push ratio
+        end
+        daily_emotion.push count_result
       end
-      daily_emotion
+      date_range.insert 0, 'x'
+      daily_emotion.insert 0, date_range
     end
 
     def get_every_emotion(tweets)
@@ -113,29 +129,21 @@ class TweetsController < ApplicationController
 
 
     def get_total_emotion(tweets,date_range,emotion)
-      emotion_count = [emotion]
-      date_range.each do |date|
-        emotion_count.push(tweets.where(date:date,emotion:emotion).count)
-      end
-      emotion_count
 
+      [emotion] + date_range.map{|date| tweets.where(date:date,emotion:emotion).count}
     end
 
     def get_emotion(tweets)
       category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
-      emotions_count = []
-      category.each do |emotion|
-        emotions_count.push [emotion, tweets.where(emotion: emotion,).count ]
-      end
-      emotions_count
+  
+      category.map {|emotion| [emotion,tweets.where(emotion: emotion,).count]}
+     
     end
 
     def get_locations(tweets)
-      tweets_locations = []
-      tweets.each do |tweet|
-        tweets_locations.push [tweet.emotion,tweet.lon,tweet.lat]
-      end
-      tweets_locations
+     
+      tweets.select("emotion","lon","lat").map {|tweet| [tweet.emotion, tweet.lon, tweet.lat]}
+      
     end
 
 end
