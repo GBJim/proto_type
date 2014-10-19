@@ -19,7 +19,12 @@ class Tweet < ActiveRecord::Base
 	def self.emotions_ratio
 		sum = self.count.to_f
 		ratio = self.all_emotions
-		ratio.update(ratio){|key,v1,v2|v1/sum}
+		result = {}
+		#ratio.update(ratio){|key,v1,v2|v1/sum}
+		['sadness','trust','anger','joy','disgust','fear','anticipation','surprise'].each do |emotion|
+ 			result[emotion] = ratio[emotion]/sum
+		end
+		result
 	end
 
 

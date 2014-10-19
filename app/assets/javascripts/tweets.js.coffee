@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-
+console.log(gon.face)
 
 renderLineChart = ->
   lineChart = c3.generate(
@@ -104,8 +104,40 @@ renderMap =  ->
   overlay.setMap map
 
 
+renderFace = ->
+  singleScale = d3.scale.linear().domain([0,1]).range([0.2,1]) 
+  dualScale = d3.scale.linear().domain([0,1]).range([-1,1])
+  surpriseScale = d3.scale.linear().domain([0,1]).range([0.9,1]) 
+  joyScale = d3.scale.pow(2).range([-0.8,2]) 
+
+  c = d3.chernoff().face((d) ->
+      singleScale(d.anticipation)   #Anticipation
+  ).hair((d) ->
+     joyScale(d.anger)   #Anger
+  ).mouth((d) ->
+    joyScale(d.joy)   #Joy
+  ).nosew((d) ->
+      singleScale(d.trust)  #trust
+  ).noseh((d) ->
+      singleScale(d.disgust)  #disgust
+  ).eyew((d) ->
+       surpriseScale(d.surprise)  #surprise
+  ).eyeh((d) ->
+      singleScale(d.fear) #fear
+  ).brow((d) ->
+    dualScale(d.sadness)   #sadness
+  )
+  svg = d3.select("#face").append("svg:svg").attr("height", 200).attr("width", 200)
+  dat = [gon.face]
+  svg.selectAll("g.chernoff").data(dat).enter().append("svg:g").attr("class", "chernoff").attr("transform", (d, i) ->
+    "scale(1." + i + ")translate(" + (i * 100) + "," + (i * 100) + ")"
+  ).call c
+  
+
+
 
 
 $(document).on('ready',renderLineChart);
 $(document).on('ready',renderPieChart);
 $(document).on('ready',renderMap);
+$(document).on('ready',renderFace);

@@ -16,4 +16,5 @@
 //= require bootstrap
 //= require d3
 //= require c3
+//= require chernoff
 //= require_tree .

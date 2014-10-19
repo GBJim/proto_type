@@ -22,6 +22,7 @@ class TweetsController < ApplicationController
     gon.daily_emotion = get_daily_emotion_ratio(tweets)
     gon.total_emotion = get_emotion(tweets)
     gon.locations = get_locations(tweets)
+    gon.face = tweets.emotions_ratio
   end
 
   def show
