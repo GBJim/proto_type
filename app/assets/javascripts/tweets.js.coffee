@@ -127,7 +127,7 @@ renderFace = ->
   ).brow((d) ->
     dualScale(d.sadness)   #sadness
   )
-  svg = d3.select("#face").append("svg:svg").attr("height", 200).attr("width", 200)
+  svg = d3.select("#face-one").append("svg:svg").attr("height", 200).attr("width", 200)
   dat = [gon.face]
   svg.selectAll("g.chernoff").data(dat).enter().append("svg:g").attr("class", "chernoff").attr("transform", (d, i) ->
     "scale(1." + i + ")translate(" + (i * 100) + "," + (i * 100) + ")"
