@@ -9,6 +9,11 @@ class TweetsController < ApplicationController
 
   # GET /tweets/1
   # GET /tweets/1.json
+  def face
+    render :partial => "face" 
+  end
+
+
   def chart
     #emotions_count = get_emotion
     @every_emotion = get_every_emotion
