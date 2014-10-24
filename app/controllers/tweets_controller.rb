@@ -10,7 +10,9 @@ class TweetsController < ApplicationController
   # GET /tweets/1
   # GET /tweets/1.json
   def face
-    render :partial => "face" 
+    @face_feature = face_scale(Tweet.emotions_ratio)
+    render :partial => "face"
+    
   end
 
 
@@ -28,6 +30,7 @@ class TweetsController < ApplicationController
     gon.total_emotion = get_emotion(tweets)
     gon.locations = get_locations(tweets)
     gon.face = tweets.emotions_ratio
+    @face_feature = face_scale(tweets .emotions_ratio)
   end
 
   def show
@@ -150,6 +153,23 @@ class TweetsController < ApplicationController
      
       tweets.select("emotion","lon","lat").map {|tweet| [tweet.emotion, tweet.lon, tweet.lat]}
       
+    end
+
+    def face_scale(emotion)
+      #emotion['sadness'] = emotion['sadness']*120
+      emotion['disgust'] = emotion['disgust'] *50 +15
+      emotion['surprise'] = emotion['surprise'] *50 +15
+      emotion['fear'] = emotion['fear'] *10 +6
+      emotion['anticipation'] = emotion['anticipation'] *10 +6
+      emotion['trust'] = emotion['trust'] *30 +10
+      emotion['anger'] = emotion['anger'] *-100 +10
+      emotion['joy'] = emotion['joy'] * 21 - 5
+      emotion['mouth_direction'] = 0
+      if emotion['joy'] < 0
+        emotion['mouth_direction'] = 1
+        emotion['joy'] = -emotion['joy']
+      end
+      emotion
     end
 
 end
