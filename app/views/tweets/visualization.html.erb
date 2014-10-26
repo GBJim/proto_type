@@ -4,6 +4,15 @@
 <%=f.submit%>
 <%end%>
 
+<%=form_tag visualization_tweets_path, :method => :get do%>
+<%=label_tag 'body'%>
+<%=text_field_tag :q, nil%>
+<%=label_tag 'Area'%>
+<%=text_field_tag :search, nil%>
+<%=submit_tag "search Near", :name => nil%>
+<%end%>
+
+
 <%=render :partial =>"face"%>
 <%=render :partial =>"face_v2"%>
 <div id="face-one" width = "25%" height = "25%"></div>

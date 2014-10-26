@@ -23,7 +23,12 @@ class TweetsController < ApplicationController
   end
 
   def visualization
-    @q = Tweet.search(params[:q])
+    if params[:search]
+      @q = Tweet.near(params[:search],20,:order => false).search(body_cont:params[:q])
+    else
+      @q = Tweet.search(body_cont:params[:q])
+    end
+
     tweets = @q.result
     @show_tweets = tweets.select("emotion","body").take(5)
     gon.daily_emotion = get_daily_emotion_ratio(tweets)
@@ -102,7 +107,7 @@ class TweetsController < ApplicationController
       start_date = tweets.start_date
       end_date = tweets.end_date
       date_range = (start_date..end_date).map {|day| day }
-      total_daily_count = tweets.group("date").count
+      total_daily_count = tweets.group("date").count(:id)
       total_daily_count.default = 0
       emotion_hash = tweets.daily_emotion_count
       emotion_hash.default = 0
@@ -145,7 +150,7 @@ class TweetsController < ApplicationController
     def get_emotion(tweets)
       category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
   
-      category.map {|emotion| [emotion,tweets.where(emotion: emotion,).count]}
+      category.map {|emotion| [emotion,tweets.where(emotion: emotion,).count(:id)]}
      
     end
 

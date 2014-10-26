@@ -17,13 +17,13 @@ class Tweet < ActiveRecord::Base
 
 
 	def self.all_emotions
-		emotions = self.group("emotion").count
+		emotions = self.group("emotion").count(:id)
 		emotions.default = 0
 		emotions
 	end
 
 	def self.emotions_ratio
-		sum = self.count.to_f
+		sum = self.count(:id).to_f
 		ratio = self.all_emotions
 		result = {}
 		#ratio.update(ratio){|key,v1,v2|v1/sum}
@@ -37,7 +37,7 @@ class Tweet < ActiveRecord::Base
 	
 
 	def self.daily_emotion_count
-		self.group("emotion").group("date").count
+		self.group("emotion").group("date").count(:id)
 
 	end
 
