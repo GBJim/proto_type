@@ -18,4 +18,20 @@ namespace :dev do
   	Tweet.import columns, values
   end
 
+  desc "assign address"
+  task :address => :environment do
+    Tweet.where(address:nil).each do |t|
+      t.address = t.reverse_geocode
+      t.save
+    end
+  end
+
+  desc "show all locations"
+  task :coordinate => :environment do
+    Tweet.all.each do |t|
+    puts "#{t.lat},#{t.lon}"
+    end
+  end
+
+
 end

@@ -1,5 +1,11 @@
 class Tweet < ActiveRecord::Base
 
+	reverse_geocoded_by :lat, :lon, :lookup => :yandex
+	after_validation :reverse_geocode
+
+	def geo
+		Geocoder.search([self.lat,self.lon]).first
+	end
 
 	def self.start_date
 		self.minimum("date")

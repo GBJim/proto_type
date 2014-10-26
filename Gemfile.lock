@@ -79,6 +79,7 @@ GEM
     execjs (2.2.1)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    geocoder (1.2.5)
     gon (5.2.0)
       actionpack (>= 2.3.0)
       json
@@ -324,6 +325,7 @@ DEPENDENCIES
   d3-rails
   dcjs-rails
   devise!
+  geocoder
   gon
   jbuilder (~> 2.0)
   jquery-rails
