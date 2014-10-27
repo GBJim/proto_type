@@ -1,21 +1,23 @@
-<%=search_form_for @q, url: visualization_tweets_path, html:{method: :get} do |f|%>
-<%=f.label :body_cont%>
-<%=f.search_field :body_cont%>
-<%=f.submit%>
-<%end%>
+
 
 <%=form_tag visualization_tweets_path, :method => :get do%>
 <%=label_tag 'body'%>
-<%=text_field_tag :q, nil%>
+<%=text_field_tag :q, params[:q]%>
 <%=label_tag 'Area'%>
-<%=text_field_tag :search, nil%>
+<%=text_field_tag :search, params[:search]%>
 <%=submit_tag "search Near", :name => nil%>
 <%end%>
 
-
+<h2><%=@count%> Tweets</h2>
+<div class = "row">
+	<div class = "col-md-3">
 <%=render :partial =>"face"%>
+</div>
+<div class = "col-md-3">
 <%=render :partial =>"face_v2"%>
+</div>
 <div id="face-one" width = "25%" height = "25%"></div>
+</div>
 <div id = "pie-chart"></div>
 <div id = "line-chart"></div>
 <div id="map" style ="max-width: 90%"></div>
