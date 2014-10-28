@@ -13,7 +13,11 @@
 	<path class = "inner-eye" d="M 135,288a <%=@face_feature['fear']%>,<%=@face_feature['anticipation']%> 0 1 1 0.1,0" transform="rotate(-6.303915467578918 135.0500030517578 280.0000305175781)"></path>	
 	<path class = "inner-eye" d="M 265,288a <%=@face_feature['fear']%>,<%=@face_feature['anticipation']%> 0 1 1 0.1,0" transform="rotate(6.303915467578918 265.05001068115234 280.0000305175781)"></path>
 
-	<path class = "nose" d="M 170,330l 30,<%=@face_feature['trust']%>l 30,<%=-@face_feature['trust']%>" stroke="#000" stroke-width="6.65220694086943" fill="none" transform="scale(1.2026084081735462 1.2026084081735462), translate(-33.69482647826426 -58.12357567500585)"></path>
+
+	<path class ="nose" d = "M 160 330A 10 13 0 1 0 245 330l -85 0"> </path>
+	<circle cx = "185" cy= "350" r ="10" fill="black"></circle>
+	<circle cx = "215" cy= "350" r ="10" fill="black"></circle>
+
 
 	<path class = "mouth" d="M 145,410 a 10,<%=@face_feature['joy']%> 0 1 <%=@face_feature['mouth_direction']%> 110,0"></path>
 
