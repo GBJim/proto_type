@@ -135,9 +135,12 @@ renderFace = ->
   
 
 
-
+colorFace = ->
+  colorScale = d3.scale.linear().domain([0,1]).range(["#A67352","green"]);
+  d3.select(".skin-1").style("fill",colorScale(gon.disgust));
 
 $(document).on('ready',renderLineChart);
 $(document).on('ready',renderPieChart);
 $(document).on('ready',renderMap);
 $(document).on('ready',renderFace);
+$(document).on('ready',colorFace);
