@@ -4,8 +4,10 @@
   <title>ProtoType</title>
   <%=include_gon%>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%=stylesheet_link_tag "http://openlayers.org/en/v3.0.0/css/ol.css"%>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true"  %>
+   <%= javascript_include_tag "http://openlayers.org/en/v3.0.0/build/ol.js"  %>
+  <%#= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true"  %>
 
   <%= csrf_meta_tags %>
 <meta name="viewport" content="width=device-width, initial-scale=1"/></head>
@@ -17,4 +19,50 @@
 <%= yield %>
 
 </body>
+
+ <script type="text/javascript">
+    var renderMap = function(){
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 4
+        })
+      });
+
+  var dragBox = new ol.interaction.DragBox({
+  condition: ol.events.condition.shiftKeyOnly,
+  style: new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: [0, 0, 255, 1]
+    })
+  })
+});
+map.addInteraction(dragBox);
+
+
+
+
+dragBox.on('boxend', function(e) {
+  // features that intersect the box are added to the collection of
+  // selected features, and their names are displayed in the "info"
+  // div
+  var info = [];
+  var extent = dragBox.getGeometry().getExtent();
+  console.log(ol.proj.transform(extent, 'EPSG:3857', 'EPSG:4326'));
+
+});
+
+
+};
+
+
+
+</script>
+
 </html>

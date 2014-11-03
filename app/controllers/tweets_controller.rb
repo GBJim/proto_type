@@ -29,7 +29,19 @@ class TweetsController < ApplicationController
       @q = Tweet.search(body_cont:params[:q])
     end
 
-    tweets = @q.result
+    if params[:box].present?
+      box = params[:box].map{|x|x.to_f}
+      lon_min = [box[0],box[2]].min
+      lat_min = [box[1],box[3]].min
+
+      lon_max = [box[0],box[2]].max
+      lat_max = [box[1],box[3]].max
+      tweets = @q.result.where("lon < ? AND lon > ? AND lat < ? AND lat > ?",lon_max,lon_min,lat_max,lat_min)
+    else
+      tweets = @q.result
+    end
+
+    #tweets = @q.result
     #tweets = Tweet.where(emotion:"")
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
