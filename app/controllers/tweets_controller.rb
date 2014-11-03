@@ -28,8 +28,9 @@ class TweetsController < ApplicationController
     else
       @q = Tweet.search(body_cont:params[:q])
     end
-
+  
     tweets = @q.result
+    tweets = Tweet.all if gon.a.present?
     #tweets = Tweet.where(emotion:"")
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
@@ -39,6 +40,7 @@ class TweetsController < ApplicationController
     gon.face = tweets.emotions_ratio
     @face_feature = face_scale(tweets.emotions_ratio)
     @face_feature_1 = face_scale_1(tweets.emotions_ratio)
+    
   end
 
   def show
