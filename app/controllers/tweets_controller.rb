@@ -28,9 +28,26 @@ class TweetsController < ApplicationController
     else
       @q = Tweet.search(body_cont:params[:q])
     end
+<<<<<<< HEAD
   
     tweets = @q.result
     tweets = Tweet.all if gon.a.present?
+=======
+
+    if params[:box].present?
+      box = params[:box].map{|x|x.to_f}
+      lon_min = [box[0],box[2]].min
+      lat_min = [box[1],box[3]].min
+
+      lon_max = [box[0],box[2]].max
+      lat_max = [box[1],box[3]].max
+      tweets = @q.result.where("lon < ? AND lon > ? AND lat < ? AND lat > ?",lon_max,lon_min,lat_max,lat_min)
+    else
+      tweets = @q.result
+    end
+
+    #tweets = @q.result
+>>>>>>> 5e5d73c690e8ed142e1cc64fdac88f32e1773123
     #tweets = Tweet.where(emotion:"")
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
@@ -39,6 +56,7 @@ class TweetsController < ApplicationController
     gon.locations = get_locations(tweets)
     gon.face = tweets.emotions_ratio
     @face_feature = face_scale(tweets.emotions_ratio)
+    gon.disgust = @face_feature["disgust"]
     @face_feature_1 = face_scale_1(tweets.emotions_ratio)
     
   end
@@ -173,12 +191,12 @@ class TweetsController < ApplicationController
         emotion['eyebrow'] = 1
         emotion['sadness'] = -emotion['sadness']
       end
-      emotion['disgust'] = emotion['disgust'] *50 +15
-      emotion['surprise'] = emotion['surprise'] *50 +15
-      emotion['fear'] = emotion['fear'] *10 +6
-      emotion['anticipation'] = emotion['anticipation'] *10 +6
-      emotion['trust'] = emotion['trust'] *30 +10
-      emotion['anger'] = emotion['anger'] *60+150
+      
+      emotion['surprise'] = emotion['surprise'] *15 +20
+      emotion['fear'] = emotion['fear'] *-10 +16
+      emotion['anticipation'] = emotion['anticipation'] 
+      emotion['trust'] = emotion['trust'] *0.38+0.1
+      emotion['anger'] = emotion['anger'] *11+3
       emotion['joy'] = emotion['joy'] * 21 - 5
       emotion['mouth_direction'] = 0
       if emotion['joy'] < 0
