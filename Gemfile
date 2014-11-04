@@ -63,3 +63,4 @@ gem 'c3-rails'
 gem 'gon'
 gem 'ransack'
 gem 'geocoder'
+gem "js-routes"

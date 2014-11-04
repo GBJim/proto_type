@@ -28,11 +28,7 @@ class TweetsController < ApplicationController
     else
       @q = Tweet.search(body_cont:params[:q])
     end
-<<<<<<< HEAD
-  
-    tweets = @q.result
-    tweets = Tweet.all if gon.a.present?
-=======
+
 
     if params[:box].present?
       box = params[:box].map{|x|x.to_f}
@@ -47,8 +43,8 @@ class TweetsController < ApplicationController
     end
 
     #tweets = @q.result
->>>>>>> 5e5d73c690e8ed142e1cc64fdac88f32e1773123
-    #tweets = Tweet.where(emotion:"")
+
+    #tweets = Tweet.where(emotion:"fear")
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
     gon.daily_emotion = get_daily_emotion_ratio(tweets)

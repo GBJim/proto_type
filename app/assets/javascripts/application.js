@@ -17,4 +17,5 @@
 //= require d3
 //= require c3
 //= require chernoff
+//= require js-routes
 //= require_tree .

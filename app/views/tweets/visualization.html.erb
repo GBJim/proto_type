@@ -1,9 +1,8 @@
 <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
 
-<<<<<<< HEAD
-=======
-<%=link_to "hello",visualization_tweets_path(:box => [ -94.4331050844363, 31.087210883621594, -63.3198238344363, 45.917855232368424 ])%>
->>>>>>> 5e5d73c690e8ed142e1cc64fdac88f32e1773123
+
+<%#=link_to "hello",visualization_tweets_path(:box => [ -94.4331050844363, 31.087210883621594, -63.3198238344363, 45.917855232368424 ])%>
+
 <%=form_tag visualization_tweets_path, :method => :get do%>
 <%=label_tag 'body'%>
 <%=text_field_tag :q, params[:q]%>
@@ -29,8 +28,6 @@
 <table class = "table table-hover">
 <%=render @show_tweets%>
 </table>
-<<<<<<< HEAD
-=======
 
 
  <script type="text/javascript">
@@ -69,7 +66,8 @@ dragBox.on('boxend', function(e) {
   var info = [];
   var x ="1234"
   var extent = dragBox.getGeometry().getExtent();
-  console.log("<%=visualization_tweets_path(:box=>"+x+")%>");
+  extent = ol.proj.transform(extent, 'EPSG:3857', 'EPSG:4326');
+  window.location.href = Routes.visualization_tweets_path({box: extent})
 
 });
 
@@ -78,4 +76,4 @@ dragBox.on('boxend', function(e) {
 
 
 </script>
->>>>>>> 5e5d73c690e8ed142e1cc64fdac88f32e1773123
+
