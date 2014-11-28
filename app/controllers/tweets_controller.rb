@@ -1,4 +1,4 @@
-class TweetsController < ApplicationController
+ class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :edit, :update, :destroy]
 
   # GET /tweets
@@ -29,6 +29,7 @@ class TweetsController < ApplicationController
       @q = Tweet.search(body_cont:params[:q])
     end
 
+
     if params[:box].present?
       box = params[:box].map{|x|x.to_f}
       lon_min = [box[0],box[2]].min
@@ -42,7 +43,7 @@ class TweetsController < ApplicationController
     end
 
     #tweets = @q.result
-    #tweets = Tweet.where(emotion:"surprise")
+
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
     gon.daily_emotion = get_daily_emotion_ratio(tweets)
@@ -52,6 +53,11 @@ class TweetsController < ApplicationController
     @face_feature = face_scale(tweets.emotions_ratio)
     gon.disgust = @face_feature["disgust"]
     @face_feature_1 = face_scale_1(tweets.emotions_ratio)
+    respond_to do |format|
+      format.html{}
+      format.json{render json: tweets.geo_json}
+    end
+    
   end
 
   def show

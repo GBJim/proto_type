@@ -3,6 +3,20 @@ class Tweet < ActiveRecord::Base
 	reverse_geocoded_by :lat, :lon, :lookup => :yandex
 	after_validation :reverse_geocode
 
+	def geo_json
+		{type: "Feature",
+		 geometry:{type: "Point", coordinates: [self.lon,self.lat]}, properties: {emotion: self.emotion}}
+	end
+
+	def self.geo_json
+		result = {type: "FeatureCollection", features:[],
+		 crs: {type: "name", properties: {name: "urn:ogc:def:crs:OGC:1.3:CRS84"}}}
+		self.all.each do |tweet|
+			result[:features].push tweet.geo_json
+		end
+		result
+	end
+
 	def geo
 		Geocoder.search([self.lat,self.lon]).first
 	end
