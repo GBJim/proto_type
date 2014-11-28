@@ -44,6 +44,10 @@
 
     #tweets = @q.result
 
+
+
+    #tweets = Tweet.where(emotion:"fear")
+
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
     gon.daily_emotion = get_daily_emotion_ratio(tweets)
@@ -53,10 +57,12 @@
     @face_feature = face_scale(tweets.emotions_ratio)
     gon.disgust = @face_feature["disgust"]
     @face_feature_1 = face_scale_1(tweets.emotions_ratio)
+
     respond_to do |format|
       format.html{}
       format.json{render json: tweets.geo_json}
     end
+
     
   end
 

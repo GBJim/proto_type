@@ -17,6 +17,9 @@
 //= require d3
 //= require c3
 //= require chernoff
+<<<<<<< HEAD
 // =require jquery.gridster.min
+=======
+>>>>>>> 047201dbe77b2e15c678be9fbd156c9cca0a59da
 //= require js-routes
 //= require_tree .
