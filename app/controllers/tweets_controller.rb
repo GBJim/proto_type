@@ -42,7 +42,7 @@ class TweetsController < ApplicationController
     end
 
     #tweets = @q.result
-    #tweets = Tweet.where(emotion:"")
+    #tweets = Tweet.where(emotion:"surprise")
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
     gon.daily_emotion = get_daily_emotion_ratio(tweets)
