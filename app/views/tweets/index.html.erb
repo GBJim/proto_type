@@ -1,16 +1,21 @@
 <%- model_class = Tweet -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => Tweet %></h1>
+  <h1>Emo Tweets</h1>
 </div>
+
+<%=form_tag tweets_path, :method => :get do%>
+<%=label_tag 'User Screen Name '%>
+<%=text_field_tag :screen_name, params[:screen_name]%>
+
+<%=submit_tag "Start", :name => nil%>
+<%end%>
+
+
 <table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
-      <th><%= model_class.human_attribute_name(:body) %></th>
-      <th><%= model_class.human_attribute_name(:lon) %></th>
-      <th><%= model_class.human_attribute_name(:lat) %></th>
-      <th><%= model_class.human_attribute_name(:date) %></th>
-      <th><%= model_class.human_attribute_name(:emotion) %></th>
+      <th><%= model_class.human_attribute_name(:text) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -18,13 +23,10 @@
   <tbody>
     <% @tweets.each do |tweet| %>
       <tr>
-        <td><%= tweet.id %></td>
-        <td><%= tweet.body %></td>
-        <td><%= tweet.lon %></td>
-        <td><%= tweet.lat %></td>
-        <td><%= tweet.date %></td>
-        <td><%= tweet.emotion %></td>
-        <td><%=l tweet.created_at, format: :long %></td>
+        <td><%= tweet[:id] %></td>
+        <td><%= tweet[:text] %></td>
+      
+        <td><%= tweet[:created_at] %></td>
         <td>
           <%= link_to tweet_path(tweet), :class => 'btn btn-xs', :title => "#{ t('.show', :default => t('helpers.links.show')) }" do %>
             <%= glyph 'info-sign' %>

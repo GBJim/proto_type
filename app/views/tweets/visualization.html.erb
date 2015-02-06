@@ -32,7 +32,26 @@
 
  <script type="text/javascript">
     var source = new ol.source.GeoJSON({url : document.URL+ "&format=json" });
+
  
+
+var styleMap = new ol.style.Style({rules: [
+  new ol.style.Rule({
+    filter: 'emotion == "sadness"',
+    symbolizers: [
+      new ol.style.Circle({
+        radius: 3,
+           fill: new ol.style.Fill({
+                  color: 'green'
+                }),
+      })
+    ]
+  })
+]});
+ 
+
+ 
+   
 
       var map = new ol.Map({
         target: 'map',
@@ -47,17 +66,7 @@
          new ol.layer.Vector({
             title: 'Earthquakes',
             source: source,
-            style: new ol.style.Style({
-              image: new ol.style.Circle({
-                radius: 5,
-                fill: new ol.style.Fill({
-                  color: '#0000FF'
-                }),
-                stroke: new ol.style.Stroke({
-                  color: '#000000'
-                })
-              })
-            })
+            style: styleMap
           })
         ],
 

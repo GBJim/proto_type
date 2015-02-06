@@ -3,8 +3,27 @@
 
   # GET /tweets
   # GET /tweets.json
+
+
+
+
+
+
   def index
-    @tweets = Tweet.all
+
+ 
+    if params[:screen_name].present?
+      tweets_count = 200
+      begin 
+        request_params = {:count => tweets_count, :include_rt => false }
+        @tweets = get_user_tweets(params[:screen_name])
+      rescue
+      end
+     else
+      @tweets = [{:id=>1, :text=>"dummy", :created_at=>123}]
+    end
+
+   
   end
 
   # GET /tweets/1
@@ -119,6 +138,42 @@
   end
 
   private
+
+  def get_user_tweets(screen_name, tweets_count = 200)
+
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = "MLGdNZCfmzGthHTAyJU4KFvbU"
+      config.consumer_secret     = "Tfp7DIZcJLbnS8BR5CWQmZklrhsbtc3fMfssKPT4SZoYsPiQKw"
+      config.access_token        = "2383540880-s2C8xPgA4ITF7QnLRFnHK1es2UEbmW8qHQ87sX5"
+      config.access_token_secret = "kLYgBTPeslLgaFugCx0PoiBpPIKnyCBEVfqqJCkjsSKpP"
+    end
+
+    request_params = {:count => tweets_count, :include_rt => false }
+
+    begin
+    page_tweets = client.user_timeline(screen_name, request_params)
+
+    total_tweets =  page_tweets
+
+    while page_tweets.length >= tweets_count do
+      request_params[:max_id] = page_tweets.last.id
+      page_tweets = client.user_timeline(screen_name, request_params)
+      total_tweets.delete_at(-1) if page_tweets.length > 0 
+      total_tweets += page_tweets
+    end
+    return total_tweets
+
+
+    rescue
+    end
+
+
+
+  end    
+
+
+
+
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
       @tweet = Tweet.find(params[:id])

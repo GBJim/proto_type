@@ -36,7 +36,7 @@ gem 'spring',        group: :development
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+# gem 'debugger', group: [:development, :test] 
 
 gem 'bundler'
 
@@ -64,3 +64,6 @@ gem 'gon'
 gem 'ransack'
 gem 'geocoder'
 gem "js-routes"
+gem 'twitter'
+gem 'rails_12factor', group: :production
+ruby "2.2.0"
