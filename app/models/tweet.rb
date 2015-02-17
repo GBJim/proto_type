@@ -36,6 +36,14 @@ class Tweet < ActiveRecord::Base
 		emotions
 	end
 
+
+
+	def self.total_emotions
+		emotions = self.group(:date, :emotion).count(:id)
+		emotions.default = 0
+		emotions
+	end
+
 	def self.emotions_ratio
 		sum = self.count(:id).to_f
 		ratio = self.all_emotions

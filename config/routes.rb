@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :tweets do
     collection do
-      get 'chart', 'visualization','face' 
+      get 'chart', 'visualization','face', 'emoface' 
     end
   end
 

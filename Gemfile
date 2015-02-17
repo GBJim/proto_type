@@ -65,5 +65,6 @@ gem 'ransack'
 gem 'geocoder'
 gem "js-routes"
 gem 'twitter'
+gem "dygraphs-rails"
 gem 'rails_12factor', group: :production
 ruby "2.2.0"

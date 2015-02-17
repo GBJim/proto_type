@@ -19,6 +19,6 @@
 //= require chernoff
 
 // =require jquery.gridster.min
-
+//= require dygraph-combined
 //= require js-routes
 //= require_tree .

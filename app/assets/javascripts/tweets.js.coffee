@@ -3,7 +3,18 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 
+
+renderNewLineChart = ->
+  csv =     "Date,Temperature\n" +
+    "2008-05-07,75\n" +
+    "2008-05-08,70\n" +
+    "2008-05-09,80\n"
+  new Dygraph(document.getElementById('newLineChart'), gon.test)
+
+
+
 renderLineChart = ->
+  console.log(gon.test);
   lineChart = c3.generate(
     bindto: '#line-chart'
     data:
@@ -97,8 +108,9 @@ colorFace = ->
   colorScale = d3.scale.linear().domain([0,1]).range(["#A67352","green"]);
   d3.select(".skin-1").style("fill",colorScale(gon.disgust));
 
-$(document).on('ready',renderLineChart);
-$(document).on('ready',renderPieChart);
+#$(document).on('ready',renderLineChart);
+#$(document).on('ready',renderPieChart);
 #$(document).on('ready',renderMap);
 $(document).on('ready',renderFace);
 $(document).on('ready',colorFace);
+#$(document).on('ready',renderNewLineChart);

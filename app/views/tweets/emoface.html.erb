@@ -1,0 +1,18 @@
+<%=form_tag emoface_tweets_path, :method => :get do%>
+<%=label_tag 'User Screen Name '%>
+<%=text_field_tag :screen_name, params[:screen_name]%>
+
+<%=submit_tag "Start", :name => nil%>
+<%end%>
+
+<%=image_tag @profile_image%>
+<%=@text%>
+<div class = "row">
+	<div class = "col-md-3">
+<%=render :partial =>"face"%>
+</div>
+<div class = "col-md-3">
+<%=render :partial =>"face_v2"%>
+</div>
+<div id="face-one" width = "25%" height = "25%"></div>
+</div>

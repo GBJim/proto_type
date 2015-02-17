@@ -1,3 +1,4 @@
+=begin
 Tweet.create!([
   {body: "#livewithemblem3 @wesleystromberg @keatonstromberg @emblemthree my phone is gonna die!! :( please say you love me! ♡", lon: -88.091396, lat: 42.961806, date: "2014-09-19", emotion: "sadness", address: "14125 West Sun Valley Drive, New Berlin, WI 53151, USA"},
   {body: "#makesmeyup follow @letsyup and win smartphone @umeshgoyal007 @umangpilot @trishabiswas93 @alexguiarebello @ladyishita @ishilpa_", lon: 72.984493, lat: 19.247753, date: "2014-09-09", emotion: "trust", address: "A4, Brahmand, Thane West, Thane, Maharashtra 400607, India"},
@@ -6065,3 +6066,4 @@ Tweet.create!([
   {body: "😭 can't be, you ain't been on my phone all day. that ain't us", lon: -96.334013, lat: 30.596072, date: "2014-09-05", emotion: "sadness", address: "United States, Texas, Brazos, College Station, FM-2154"},
   {body: "😭😭😭 that phone so fucked. i didn't know it could bend like that", lon: -117.982855, lat: 33.688793, date: "2014-09-06", emotion: "sadness", address: "United States, California, Orange, Huntington Beach, Gregory Ln, 18842"}
 ])
+=end

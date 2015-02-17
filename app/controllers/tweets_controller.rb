@@ -22,12 +22,39 @@
      else
       @tweets = [{:id=>1, :text=>"dummy", :created_at=>123}]
     end
+    @tweets = Tweet.all()
 
    
   end
 
   # GET /tweets/1
   # GET /tweets/1.json
+  def emoface
+    if params[:screen_name].present?
+      tweets_count = 200
+      
+        @tweets = get_user_tweets(params[:screen_name])
+        @profile_image = @tweets[0]["user"]["profile_image_url"]#.to_str.gsub("_normal","")
+        emotions = tweets_to_emotions(@tweets)
+
+        emotions_ratio = emotions_sum(emotions)
+        
+        @text = emotions_ratio
+        gon.face = emotions_ratio.clone
+        @face_feature = face_scale(emotions_ratio.clone)
+        gon.disgust = @face_feature["disgust"]
+        @face_feature_1 = face_scale_1(emotions_ratio.clone)
+      
+     else
+      @tweets = [{:id=>1, :text=>"dummy", :created_at=>123}]
+      @text = "Please search"
+    end
+   
+  end
+
+
+
+
   def face
     @face_feature = face_scale(Tweet.emotions_ratio)
     render :partial => "face"
@@ -69,13 +96,15 @@
 
     @count = tweets.count(:id)
     @show_tweets = tweets.select("emotion","body").take(5)
-    gon.daily_emotion = get_daily_emotion_ratio(tweets)
+    gon.daily_emotion = get_every_emotion(tweets)
     gon.total_emotion = get_emotion(tweets)
     gon.locations = get_locations(tweets)
     gon.face = tweets.emotions_ratio
     @face_feature = face_scale(tweets.emotions_ratio)
     gon.disgust = @face_feature["disgust"]
     @face_feature_1 = face_scale_1(tweets.emotions_ratio)
+    gon.test = get_daily_emotionalCSV(tweets)
+
 
     respond_to do |format|
       format.html{}
@@ -139,6 +168,30 @@
 
   private
 
+  def emotions_sum(emotions)
+    emotion_set = Set.new ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
+    emoHash = {}
+    emoHash.default = 0
+    sum = 0
+    emotions.each do |emotion|
+      begin
+        key = emotion['groups'][0]['name']
+      rescue
+        next
+      end
+      if emotion_set.include? key
+        sum += 1
+        emoHash[key] += 1
+      end
+    end
+    sum = sum.to_f
+    emoHash.each do |key, value|
+      emoHash[key] = value/sum
+    end
+    puts emoHash
+    emoHash
+  end
+
   def get_user_tweets(screen_name, tweets_count = 200)
 
     client = Twitter::REST::Client.new do |config|
@@ -184,6 +237,54 @@
       params.require(:tweet).permit(:body, :lon, :lat, :date, :emotion)
     end
 
+    def tweets_to_emotions(tweets)
+      emotions =[]
+      tweets.each do |tweet|
+        payload = {:text => tweet["text"], :lang => "en"}
+        response = tweet_to_emotion({:text => tweet["text"], :lang => "en"})
+        emotions <<  response
+      end      
+      emotions
+    end
+
+    def tweet_to_emotion(payload)
+      uri = URI("http://140.114.77.14:8080/webresources/jammin/emotion")
+      req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
+      req.body = payload.to_json
+      response = Net::HTTP.new("140.114.77.14", 8080).start {|http| http.request(req) }
+      begin
+        JSON.parse(response.body)
+      rescue
+        nil
+      end
+    end
+
+
+    def get_daily_emotionalCSV(tweets)
+      emotion_category = ['sadness','trust','anger','joy','disgust','fear','anticipation','surprise']
+      start_date = tweets.start_date
+      end_date = tweets.end_date
+      date_range = (start_date..end_date).map {|day| day }
+      emoHash = tweets.total_emotions
+      csv_string = CSV.generate do |csv|
+        csv << (["Date"] + emotion_category)
+        date_range.each do |day|
+          row = [day]
+          emotion_category.each do |emotion|
+            key = [day, emotion]
+            row.push(emoHash[key])
+          end
+          csv << row
+        end
+      end
+      csv_string
+    end
+
+    def get_daily_emotion(tweets)
+      start_date = tweets.start_date
+      end_date = tweets.end_date
+      date_range = (start_date..end_date).map {|day| day }
+    end
 
 
     def get_daily_emotion_ratio(tweets)
